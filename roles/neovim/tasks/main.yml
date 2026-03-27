@@ -1,0 +1,64 @@
+
+- name: Install Packages
+  apt:
+    name:
+      - ripgrep
+      - nodejs
+      - build-essential
+    state: present
+
+- name: Check if nvim is installed
+  stat:
+    path: /opt/nvim-linux-x86_64
+  register: nvim_installed
+
+- name: Download nvim tar
+  get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    dest: /tmp/nvim-linux-x86_64.tar.gz
+  when: not nvim_installed.stat.exists
+
+- name: Unarchive nvim
+  unarchive:
+    src: /tmp/nvim-linux-x86_64.tar.gz
+    dest: /opt/
+    remote_src: yes
+  when: not nvim_installed.stat.exists
+  
+- name: Symlink nvim
+  file:
+    src: /opt/nvim-linux-x86_64/bin/nvim
+    dest: /usr/local/bin/nvim
+    state: link
+
+- name: Get lazygit latest version
+  uri:
+    url: https://api.github.com/repos/jesseduffield/lazygit/releases/latest
+    return_content: yes
+  register: lazygit_release
+
+- name: Set lazygit version fact
+  set_fact:
+    lazygit_version: "{{ lazygit_release.json.tag_name | replace('v', '') }}"
+
+- name: Download lazygit tar
+  get_url:
+    url: "https://github.com/jesseduffield/lazygit/releases/download/v{{ lazygit_version }}/lazygit_{{ lazygit_version }}_Linux_x86_64.tar.gz"
+    dest: /tmp/lazygit.tar.gz
+
+- name: Create lazygit tmp dir
+  file:
+    path: /tmp/lazygit
+    state: directory
+
+- name: Unarchive lazygit
+  unarchive:
+    src: /tmp/lazygit.tar.gz
+    dest: /tmp/lazygit/
+    remote_src: yes
+    creates: /tmp/lazygit/lazygit
+
+- name: Install lazygit binary
+  shell: install /tmp/lazygit/lazygit -D -t /usr/local/bin/
+  args:
+    creates: /usr/local/bin/lazygit

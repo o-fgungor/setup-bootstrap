@@ -1,0 +1,25 @@
+- name: Create fonts directory
+  file:
+    path: /usr/local/share/fonts
+    state: directory
+    mode: '0755'
+
+- name: Download Fonts
+  get_url:
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/{{ nerd_fonts_version }}/{{ item }}.zip"
+    dest: "/tmp/{{ item }}.zip"
+    force: no
+  loop:
+    - "{{ cascadia_font }}"
+    # - "{{ jetbrains_font }}"
+
+- name: Unarchive the fonts
+  unarchive:
+    src: "/tmp/{{ item }}.zip"
+    dest: "/usr/local/share/fonts"
+    remote_src: yes
+  loop:
+    - "{{ cascadia_font }}"
+    # - "{{ jetbrains_font }}"
+  notify: Update font cache
+

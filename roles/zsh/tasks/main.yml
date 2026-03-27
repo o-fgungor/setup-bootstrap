@@ -1,0 +1,25 @@
+- name: Install zsh
+  apt:
+    name: zsh
+    state: present
+
+- name: Install Oh My Zsh
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  args:
+    creates: /home/{{ ansible_user }}/.oh-my-zsh
+  become: no
+
+- name: Make zsh default
+  user:
+    name: "{{ ansible_user }}"
+    shell: /bin/zsh
+
+- name: Install zsh Plugins
+  git: 
+    repo: "{{ item }}"
+    dest: "/home/{{ ansible_user }}/.oh-my-zsh/custom/plugins/{{ item | basename }}"
+  loop:
+    - https://github.com/zsh-users/zsh-syntax-highlighting                                                                                                                      
+    - https://github.com/zsh-users/zsh-autosuggestions                                                                                                                          
+    - https://github.com/zsh-users/zsh-history-substring-search
+  become: no

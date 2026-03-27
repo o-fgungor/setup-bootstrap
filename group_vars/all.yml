@@ -1,0 +1,5 @@
+dotfiles_repo: https://github.com/o-fgungor/dotfiles
+
+cascadia_font: CascadiaMono
+jetbrains_font: JetBrainsMono
+nerd_fonts_version: v3.4.0

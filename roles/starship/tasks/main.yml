@@ -1,0 +1,10 @@
+- name: Install starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- --yes
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Configure starship preset
+  shell: starship preset jetpack -o ~/.config/starship.toml
+  args:                                                                      
+    creates: "/home/{{ ansible_user }}/.config/starship.toml"
+  become: no

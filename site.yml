@@ -1,0 +1,22 @@
+---
+- name: "Configuration"
+  hosts: my_machines
+  # Bazı roller (apt kurulumu gibi) sudo yetkisi ister, 
+  # ama dotfiles gibi rollerin kullanıcı adına çalışması gerekir.
+  # Bu yüzden 'become' ayarını rol bazlı veya task bazlı yöneteceğiz.
+  
+  roles:
+    - role: common    # Git, curl, unzip etc.
+      become: yes
+    - role: zsh       # Zsh, Oh My Zsh
+      become: yes
+    - role: fonts     # Nerd Fonts (Cascadia/JetBrains)
+      become: yes
+    - role: starship  # Starship Prompt
+      become: yes
+    - role: ghostty   # Ghostty Terminal
+      become: yes
+    - role: neovim    # Neovim - lazygit - lazyvim
+      become: yes
+    - role: dotfiles  # From Github
+      become: no

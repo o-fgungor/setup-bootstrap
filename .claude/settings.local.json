@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find /home/ben/ansible-setup -not -path */lib/* -not -path */bin/* -not -path */.git/* -type f)",
+      "Bash(wc:*)",
+      "Read(//home/ben/.local/share/pipx/venvs/ansible/bin/**)",
+      "Read(//home/ben/.local/bin/**)",
+      "Bash(grep -E \"\\\\.\\(yml|ini|cfg|toml\\)$\")"
+    ]
+  }
+}
