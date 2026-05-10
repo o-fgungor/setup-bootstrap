@@ -3,8 +3,11 @@
   args:
     creates: /usr/local/bin/starship
 
+- name: Ensure starship config directory exists
+  file:
+    path: "/home/{{ ansible_user }}/.config"
+    state: directory
+
 - name: Configure starship preset
-  shell: starship preset jetpack -o ~/.config/starship.toml
-  args:                                                                      
-    creates: "/home/{{ ansible_user }}/.config/starship.toml"
+  shell: starship preset pure -o /home/{{ ansible_user }}/.config/starship.toml
   become: no

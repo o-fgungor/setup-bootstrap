@@ -1,6 +1,6 @@
 ---
 - name: "Configuration"
-  hosts: my_machines
+  hosts: machines
   # Bazı roller (apt kurulumu gibi) sudo yetkisi ister, 
   # ama dotfiles gibi rollerin kullanıcı adına çalışması gerekir.
   # Bu yüzden 'become' ayarını rol bazlı veya task bazlı yöneteceğiz.
