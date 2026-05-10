@@ -1,0 +1,53 @@
+- name: Define dotfiles links
+  set_fact:
+    dotfiles_links:
+      - src: "/home/{{ ansible_user }}/dotfiles/zsh/.zshrc"
+        dest: "/home/{{ ansible_user }}/.zshrc"
+      - src: "/home/{{ ansible_user }}/dotfiles/ghostty/config"
+        dest: "/home/{{ ansible_user }}/.config/ghostty/config"
+      - src: "/home/{{ ansible_user }}/dotfiles/nvim"
+        dest: "/home/{{ ansible_user }}/.config/nvim"
+  become: no
+
+- name: Ensure config directories exist
+  file:
+    path: "/home/{{ ansible_user }}/.config/ghostty"
+    state: directory
+  become: no
+
+- name: Clone dotfiles repo
+  git:
+    repo: "{{ dotfiles_repo }}"
+    dest: "/home/{{ ansible_user }}/dotfiles"
+  become: no
+
+- name: Check existing dotfile targets
+  stat:
+    path: "{{ item.dest }}"
+    follow: false
+  loop: "{{ dotfiles_links }}"
+  register: dotfiles_target_stats
+  become: no
+
+- name: Backup existing targets that block symlinks
+  command:
+    argv:
+      - mv
+      - "{{ item.stat.path }}"
+      - "{{ item.stat.path }}.pre-dotfiles-{{ ansible_date_time.iso8601_basic_short }}"
+  loop: "{{ dotfiles_target_stats.results }}"
+  when:
+    - item.stat.exists
+    - not item.stat.islnk | default(false)
+  args:
+    creates: "{{ item.stat.path }}.pre-dotfiles-{{ ansible_date_time.iso8601_basic_short }}"
+    removes: "{{ item.stat.path }}"
+  become: no
+
+- name: Symlink
+  file:
+    state: link
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop: "{{ dotfiles_links }}"
+  become: no

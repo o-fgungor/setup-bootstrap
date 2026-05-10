@@ -1,0 +1,328 @@
+# version: 1.0.0
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = false
+continuation_prompt = "[\u25b8\u25b9 ](dimmed white)"
+
+format = """($nix_shell$container$fill$git_metrics\n)$cmd_duration\
+$hostname\
+$localip\
+$shlvl\
+$shell\
+$env_var\
+$jobs\
+$sudo\
+$username\
+$character"""
+
+right_format = """
+$singularity\
+$kubernetes\
+$directory\
+$vcsh\
+$fossil_branch\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$hg_branch\
+$pijul_channel\
+$docker_context\
+$package\
+$c\
+$cpp\
+$cmake\
+$cobol\
+$daml\
+$dart\
+$deno\
+$dotnet\
+$elixir\
+$elm\
+$erlang\
+$fennel\
+$fortran\
+$golang\
+$guix_shell\
+$haskell\
+$haxe\
+$helm\
+$java\
+$julia\
+$kotlin\
+$gradle\
+$lua\
+$nim\
+$nodejs\
+$ocaml\
+$opa\
+$perl\
+$php\
+$pulumi\
+$purescript\
+$python\
+$raku\
+$rlang\
+$red\
+$ruby\
+$rust\
+$scala\
+$solidity\
+$swift\
+$terraform\
+$vlang\
+$vagrant\
+$xmake\
+$zig\
+$buf\
+$conda\
+$pixi\
+$meson\
+$spack\
+$memory_usage\
+$aws\
+$gcloud\
+$openstack\
+$azure\
+$crystal\
+$custom\
+$status\
+$os\
+$battery\
+$time"""
+
+[fill]
+symbol = ' '
+
+[character]
+format = "$symbol "
+success_symbol = "[\u25ce](bold italic bright-yellow)"
+error_symbol = "[\u25cb](italic purple)"
+vimcmd_symbol = "[\u25a0](italic dimmed green)"
+# not supported in zsh
+vimcmd_replace_one_symbol = "\u25cc"
+vimcmd_replace_symbol = "\u25a1"
+vimcmd_visual_symbol = "\u25bc"
+
+[env_var.VIMSHELL]
+format = "[$env_value]($style)"
+style = 'green italic'
+
+[sudo]
+format = "[$symbol]($style)"
+style = "bold italic bright-purple"
+symbol = "\u22c8\u2508"
+disabled = false
+
+[username]
+style_user = "bright-yellow bold italic"
+style_root = "purple bold italic"
+format = "[\u2b58 $user]($style) "
+disabled = false
+show_always = false
+
+[directory]
+home_symbol = "\u2302"
+truncation_length = 2
+truncation_symbol = "\u25a1 "
+read_only = " \u25c8"
+use_os_path_sep = true
+style = "italic blue"
+format = '[$path]($style)[$read_only]($read_only_style)'
+repo_root_style = 'bold blue'
+repo_root_format = '[$before_root_path]($before_repo_root_style)[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) [\u25b3](bold bright-blue)'
+
+[cmd_duration]
+format = "[\u25c4 $duration ](italic white)"
+
+[jobs]
+format = "[$symbol$number]($style) "
+style = "white"
+symbol = "[\u25b6](blue italic)"
+
+[localip]
+ssh_only = true
+format = " \u25ef[$localipv4](bold magenta)"
+disabled = false
+
+[time]
+disabled = false
+format = "[ $time]($style)"
+time_format = "%R"
+utc_time_offset = "local"
+style = "italic dimmed white"
+
+[battery]
+format = "[ $percentage $symbol]($style)"
+full_symbol = "\u2588"
+charging_symbol = "[\u2191](italic bold green)"
+discharging_symbol = "\u2193"
+unknown_symbol = "\u2591"
+empty_symbol = "\u2583"
+
+[[battery.display]]
+threshold = 20
+style = "italic bold red"
+
+[[battery.display]]
+threshold = 60
+style = "italic dimmed bright-purple"
+
+[[battery.display]]
+threshold = 70
+style = "italic dimmed yellow"
+
+[git_branch]
+format = " [$branch(:$remote_branch)]($style)"
+symbol = "[\u25b3](bold italic bright-blue)"
+style = "italic bright-blue"
+truncation_symbol = "\u22ef"
+truncation_length = 11
+ignore_branches = ["main", "master"]
+only_attached = true
+
+[git_metrics]
+format = '([\u25b4$added]($added_style))([\u25bf$deleted]($deleted_style))'
+added_style = 'italic dimmed green'
+deleted_style = 'italic dimmed red'
+ignore_submodules = true
+disabled = false
+
+[git_status]
+style = "bold italic bright-blue"
+format = "([\u23aa$ahead_behind$staged$modified$untracked$renamed$deleted$conflicted$stashed\u23a5]($style))"
+conflicted = "[\u25ea\u25e6](italic bright-magenta)"
+ahead = "[\u25b4\u2502[${count}](bold white)\u2502](italic green)"
+behind = "[\u25bf\u2502[${count}](bold white)\u2502](italic red)"
+diverged = "[\u25c7 \u25b4\u2524[${ahead_count}](regular white)\u2502\u25bf\u2524[${behind_count}](regular white)\u2502](italic bright-magenta)"
+untracked = "[\u25cc\u25e6](italic bright-yellow)"
+stashed = "[\u25c3\u25c8](italic white)"
+modified = "[\u25cf\u25e6](italic yellow)"
+staged = "[\u25aa\u2524[$count](bold white)\u2502](italic bright-cyan)"
+renamed = "[\u25ce\u25e6](italic bright-blue)"
+deleted = "[\u2715](italic red)"
+
+[deno]
+format = " [deno](italic) [\u222b $version](green bold)"
+version_format = "${raw}"
+
+[lua]
+format = " [lua](italic) [${symbol}${version}]($style)"
+version_format = "${raw}"
+symbol = "\u2a00 "
+style = "bold bright-yellow"
+
+[nodejs]
+format = " [node](italic) [\u25eb ($version)](bold bright-green)"
+version_format = "${raw}"
+detect_files = ["package-lock.json", "yarn.lock"]
+detect_folders = ["node_modules"]
+detect_extensions = []
+
+[python]
+format = " [py](italic) [${symbol}${version}]($style)"
+symbol = "[\u2309](bold bright-blue)\u230a "
+version_format = "${raw}"
+style = "bold bright-yellow"
+
+[ruby]
+format = " [rb](italic) [${symbol}${version}]($style)"
+symbol = "\u25c6 "
+version_format = "${raw}"
+style = "bold red"
+
+[rust]
+format = " [rs](italic) [$symbol$version]($style)"
+symbol = "\u2283 "
+version_format = "${raw}"
+style = "bold red"
+
+[package]
+format = " [pkg](italic dimmed) [$symbol$version]($style)"
+version_format = "${raw}"
+symbol = "\u25e8 "
+style = "dimmed yellow italic bold"
+
+[swift]
+format = " [sw](italic) [${symbol}${version}]($style)"
+symbol = "\u25c1 "
+style = "bold bright-red"
+version_format = "${raw}"
+
+[aws]
+disabled = true
+format = " [aws](italic) [$symbol $profile $region]($style)"
+style = "bold blue"
+symbol = "\u25b2 "
+
+[buf]
+symbol = "\u25a0 "
+format = " [buf](italic) [$symbol $version $buf_version]($style)"
+
+[c]
+symbol = "\u2102 "
+format = " [$symbol($version(-$name))]($style)"
+
+[cpp]
+symbol = "\u2102 "
+format = " [$symbol($version(-$name))]($style)"
+
+[conda]
+symbol = "\u25ef "
+format = " conda [$symbol$environment]($style)"
+
+[pixi]
+symbol = "\u25a0 "
+format = " pixi [$symbol$version ($environment )]($style)"
+
+[dart]
+symbol = "\u25c1\u25c5 "
+format = " dart [$symbol($version )]($style)"
+
+[docker_context]
+symbol = "\u25e7 "
+format = " docker [$symbol$context]($style)"
+
+[elixir]
+symbol = "\u25b3 "
+format = " exs [$symbol $version OTP $otp_version ]($style)"
+
+[elm]
+symbol = "\u25e9 "
+format = " elm [$symbol($version )]($style)"
+
+[golang]
+symbol = "\u2229 "
+format = " go [$symbol($version )]($style)"
+
+[haskell]
+symbol = "\u276f\u03bb "
+format = " hs [$symbol($version )]($style)"
+
+[java]
+symbol = "\u222a "
+format = " java [${symbol}(${version} )]($style)"
+
+[julia]
+symbol = "\u25ce "
+format = " jl [$symbol($version )]($style)"
+
+[memory_usage]
+symbol = "\u25aa\u25ab\u25aa "
+format = " mem [${ram}( ${swap})]($style)"
+
+[nim]
+symbol = "\u25b4\u25b2\u25b4 "
+format = " nim [$symbol($version )]($style)"
+
+[nix_shell]
+style = 'bold italic dimmed blue'
+symbol = '\u2736'
+format = '[$symbol nix\u23aa$state\u23aa]($style) [$name](italic dimmed white)'
+impure_msg = '[\u233d](bold dimmed red)'
+pure_msg = '[\u233e](bold dimmed green)'
+unknown_msg = '[\u25cc](bold dimmed yellow)'
+
+[spack]
+symbol = "\u25c7 "
+format = " spack [$symbol$environment]($style)"

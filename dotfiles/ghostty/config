@@ -1,0 +1,25 @@
+theme = TokyoNight Night
+font-family = CaskaydiaMono Nerd Font
+
+mouse-hide-while-typing = true
+
+gtk-titlebar = true
+
+window-decoration = client
+adw-toolbar-style = flat
+
+background-opacity = 0.5
+background-blur-radius = 1
+
+palette = 1=#B91919
+palette = 2=#86D531
+palette = 3=#E0A228
+palette = 4=#1A55D3
+palette = 5=#8558D8
+palette = 6=#5DAAD7
+palette = 7=#969DBD
+
+# padding
+window-padding-x = 10
+window-padding-y = 5
+window-padding-balance = true
